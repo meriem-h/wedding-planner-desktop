@@ -1040,7 +1040,7 @@ const createWindow = () => {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: '/home/wac/projects/wedding-planner-desktop/.webpack/renderer/main_window/preload.js',
+      preload: '/home/wac/projects/wedding-planner/.webpack/renderer/main_window/preload.js',
     },
   });
 
