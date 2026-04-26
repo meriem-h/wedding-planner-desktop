@@ -1,0 +1,51 @@
+user :
+id | name | firstname | email | phone | role | password | creationDateTime | updateDateTime
+
+theme :
+id | name | description | visibility | creationDateTime | updateDateTime
+
+vendor :
+id | name | firstname | company_name | adress_id | email | service_type | include_meal | validate | visibility | creationDateTime | updateDateTime
+
+guest :
+id | uid | name | firstname | email | phone | address_id | creationDateTime | updateDateTime
+
+adress :
+id | rue | voie | cp | complement_adresse | creationDateTime | updateDateTime
+
+
+
+wedding :
+id | uid | theme_id | planner_id  | primary_spouse_id | secondary_spouse_id | visibility | creationDateTime | updateDateTime
+
+formula :
+id | name | description | price | vendor_id  | creationDateTime | updateDateTime
+
+table :
+id | wedding_id | number | name | capacity | creationDateTime | updateDateTime
+
+kanban :
+id | wedding_id | status | color | order | creationDateTime | updateDateTime
+
+ceremonie :
+id | wedding_id | type (civil_ceremony, religious_ceremony, cocktail_hour, reception) | adress_id | ceremonie_dateTime | creationDateTime | updateDateTime
+
+asset :
+id | wedding_id | new_name | old_name | context (site/gallery/invitation) | visibility | creationDateTime | updateDateTime
+
+
+
+
+
+
+wedding_vendor : (selected formula)
+id |  wedding_id | vendor_id | formula_id | visibility | creationDateTime | updateDateTime
+
+task :
+id | kanban_id | title | description | order | creationDateTime | updateDateTime
+
+wedding_guest:
+id | wedding_id | guest_id | invited_by | role | presence | table_id | plus_one | plus_one_name | creationDateTime | updateDateTime
+
+task_asset : 
+id | task_id | asset_id | creationDateTime | updateDateTime
