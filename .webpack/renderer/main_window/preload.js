@@ -239,9 +239,20 @@ eval("{/** @typedef {\"info\" | \"warning\" | \"error\"} LogLevel */\n\n/** @typ
 /*!************************!*\
   !*** ./src/preload.js ***!
   \************************/
-() {
+(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
-eval("{// See the Electron documentation for details on how to use preload scripts:\n// https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvcHJlbG9hZC5qcyIsIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsid2VicGFjazovL3dlZGRpbmctcGxhbm5lci8uL3NyYy9wcmVsb2FkLmpzPzZlNDAiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gU2VlIHRoZSBFbGVjdHJvbiBkb2N1bWVudGF0aW9uIGZvciBkZXRhaWxzIG9uIGhvdyB0byB1c2UgcHJlbG9hZCBzY3JpcHRzOlxuLy8gaHR0cHM6Ly93d3cuZWxlY3Ryb25qcy5vcmcvZG9jcy9sYXRlc3QvdHV0b3JpYWwvcHJvY2Vzcy1tb2RlbCNwcmVsb2FkLXNjcmlwdHNcbiJdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQSIsImlnbm9yZUxpc3QiOltdfQ==\n//# sourceURL=webpack-internal:///./src/preload.js\n\n}");
+eval("{// See the Electron documentation for details on how to use preload scripts:\n// https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts\nconst {\n  contextBridge,\n  ipcRenderer\n} = __webpack_require__(/*! electron */ \"electron\");\ncontextBridge.exposeInMainWorld('electron', {\n  invoke: (channel, data) => ipcRenderer.invoke(channel, data)\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvcHJlbG9hZC5qcyIsIm1hcHBpbmdzIjoiQUFBQTtBQUNBO0FBQ0EsTUFBTTtFQUFFQSxhQUFhO0VBQUVDO0FBQVksQ0FBQyxHQUFHQyxtQkFBTyxDQUFDLDBCQUFVLENBQUM7QUFFMURGLGFBQWEsQ0FBQ0csaUJBQWlCLENBQUMsVUFBVSxFQUFFO0VBQ3hDQyxNQUFNLEVBQUVBLENBQUNDLE9BQU8sRUFBRUMsSUFBSSxLQUFLTCxXQUFXLENBQUNHLE1BQU0sQ0FBQ0MsT0FBTyxFQUFFQyxJQUFJO0FBQy9ELENBQUMsQ0FBQyIsInNvdXJjZXMiOlsid2VicGFjazovL3dlZGRpbmctcGxhbm5lci8uL3NyYy9wcmVsb2FkLmpzPzZlNDAiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gU2VlIHRoZSBFbGVjdHJvbiBkb2N1bWVudGF0aW9uIGZvciBkZXRhaWxzIG9uIGhvdyB0byB1c2UgcHJlbG9hZCBzY3JpcHRzOlxuLy8gaHR0cHM6Ly93d3cuZWxlY3Ryb25qcy5vcmcvZG9jcy9sYXRlc3QvdHV0b3JpYWwvcHJvY2Vzcy1tb2RlbCNwcmVsb2FkLXNjcmlwdHNcbmNvbnN0IHsgY29udGV4dEJyaWRnZSwgaXBjUmVuZGVyZXIgfSA9IHJlcXVpcmUoJ2VsZWN0cm9uJylcblxuY29udGV4dEJyaWRnZS5leHBvc2VJbk1haW5Xb3JsZCgnZWxlY3Ryb24nLCB7XG4gICAgaW52b2tlOiAoY2hhbm5lbCwgZGF0YSkgPT4gaXBjUmVuZGVyZXIuaW52b2tlKGNoYW5uZWwsIGRhdGEpXG59KSJdLCJuYW1lcyI6WyJjb250ZXh0QnJpZGdlIiwiaXBjUmVuZGVyZXIiLCJyZXF1aXJlIiwiZXhwb3NlSW5NYWluV29ybGQiLCJpbnZva2UiLCJjaGFubmVsIiwiZGF0YSJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/preload.js\n\n}");
+
+/***/ },
+
+/***/ "electron"
+/*!***************************!*\
+  !*** external "electron" ***!
+  \***************************/
+(module) {
+
+"use strict";
+module.exports = require("electron");
 
 /***/ },
 
@@ -385,7 +396,7 @@ eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpa
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("7309b338e50a9c158f9d")
+/******/ 		__webpack_require__.h = () => ("f7bce8cea3c10989e94a")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
@@ -857,10 +868,6 @@ eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpa
 /******/ 	(() => {
 /******/ 		__webpack_require__.p = "/";
 /******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/compat */
-/******/ 	
-/******/ 	if (typeof __webpack_require__ !== 'undefined') __webpack_require__.ab = "/home/wac/projects/wedding-planner-desktop/.webpack/renderer" + "/native_modules/";
 /******/ 	
 /******/ 	/* webpack/runtime/jsonp chunk loading */
 /******/ 	(() => {
