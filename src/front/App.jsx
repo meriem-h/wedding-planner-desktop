@@ -4,18 +4,14 @@ import React from 'react'
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 
-import Header from './component/Header'
-import Footer from './component/Footer'
+import { publicRoutes, privateRoutes } from './routes'
 
-import Home from './page/Home'
-import Register from './page/Register'
-import Login from './page/Login'
-import Dashboard from './page/Dashboard'
+import ProtectedRoute from './component/ProtectedRoute'
+import Header from './component/Header'
 
 export default function App() {
 
     const { user } = useAuth()
-
 
     if (!user) {
         return (
@@ -25,11 +21,13 @@ export default function App() {
                 <Header />
 
                 <Routes>
+                    {publicRoutes.map(({ path, component: Component }) => (
+                        <Route key={path} path={path} element={<Component />} />
+                    ))}
                     <Route path="*" element={<Navigate to="/" />} />
-                    <Route path="/" element={<Login />} />
-                    <Route path="/Login" element={<Login />} />
-                    <Route path="/Register" element={<Register />} />
                 </Routes>
+
+
             </HashRouter>
 
 
@@ -44,9 +42,15 @@ export default function App() {
 
             <Routes>
 
+                {privateRoutes.map(({ path, component: Component, roles }) => (
+                    <Route key={path} path={path} element={
+                        <ProtectedRoute roles={roles}>
+                            <Component />
+                        </ProtectedRoute>
+                    } />
+                ))}
                 <Route path="*" element={<Navigate to="/" />} />
-                <Route path="/" element={<Home />} />
-                <Route path="/Dashboard" element={<Dashboard />} />
+
             </Routes>
 
         </HashRouter>
