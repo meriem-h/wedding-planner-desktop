@@ -12,14 +12,16 @@ ipcMain.handle('user:create', async (event, data) => {
     }
 })
 
+
+
 ipcMain.handle('user:login', async (event, { email, password }) => {
     try {
         const user = await userRepo.findByEmail(email)
-        if (!user) return { success: false, message: 'Utilisateur introuvable' }
-        
+        if (!user) return { success: false, type: "email", message: 'Utilisateur introuvable' }
+
         const isValid = await userRepo.verifyPassword(password, user.password)
-        if (!isValid) return { success: false, message: 'Mot de passe incorrect' }
-        
+        if (!isValid) return { success: false, type: "password", message: 'Mot de passe incorrect' }
+
         return { success: true, user }
     } catch (err) {
         return { success: false, message: err.message }

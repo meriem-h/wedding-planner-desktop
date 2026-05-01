@@ -1,7 +1,7 @@
 
 
 import React from 'react'
-import { HashRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 
 import Header from './component/Header'
@@ -10,6 +10,7 @@ import Footer from './component/Footer'
 import Home from './page/Home'
 import Register from './page/Register'
 import Login from './page/Login'
+import Dashboard from './page/Dashboard'
 
 export default function App() {
 
@@ -18,31 +19,38 @@ export default function App() {
 
     if (!user) {
         return (
+
             <HashRouter>
+
+                <Header />
+
                 <Routes>
+                    <Route path="*" element={<Navigate to="/" />} />
                     <Route path="/" element={<Login />} />
                     <Route path="/Login" element={<Login />} />
                     <Route path="/Register" element={<Register />} />
                 </Routes>
             </HashRouter>
+
+
         )
     }
 
     return (
-        <ApiProvider>
 
-            {/* <Header /> */}
+        <HashRouter>
 
-            <HashRouter>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/Register" element={<Register />} />
-                    <Route path="/Login" element={<Login />} />
-                </Routes>
-            </HashRouter>
+            <Header />
 
-            {/* <Footer /> */}
+            <Routes>
 
-        </ApiProvider>
+                <Route path="*" element={<Navigate to="/" />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/Dashboard" element={<Dashboard />} />
+            </Routes>
+
+        </HashRouter>
+
+
     )
 }

@@ -8969,6 +8969,28 @@ class BaseRepository {
         this.table = table
     }
 
+
+    // on recupere les champs possible
+    async getColumns() {
+        const [rows] = await db.query(
+            `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
+             WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?`,
+            [process.env.DB_NAME, this.table]
+        )
+        return rows.map(row => row.COLUMN_NAME)
+    }
+    
+    // on retire les champs qui ne sont pas disponible en bdd
+    async clean(data) {
+        const columns = await this.getColumns()
+        return Object.fromEntries(
+            Object.entries(data).filter(([key]) => columns.includes(key))
+        )
+    }
+
+
+
+    // les requette generique et repetitif
     async findAll() {
         const [rows] = await db.query(`SELECT * FROM ${this.table}`)
         return rows
@@ -8983,17 +9005,19 @@ class BaseRepository {
     }
 
     async create(data) {
+        const cleanData = await this.clean(data)
         const [result] = await db.query(
             `INSERT INTO ${this.table} SET ?`,
-            [data]
+            [cleanData]
         )
         return result.insertId
     }
 
     async update(id, data) {
+        const cleanData = await this.clean(data)
         const [result] = await db.query(
             `UPDATE ${this.table} SET ? WHERE id = ?`,
-            [data, id]
+            [cleanData, id]
         )
         return result.affectedRows
     }
@@ -9034,15 +9058,17 @@ class UserRepository extends BaseRepository {
         return rows[0] || null
     }
 
+    async verifyPassword(plainPassword, hashedPassword) {
+        return await bcrypt.compare(plainPassword, hashedPassword)
+    }
+
     async create(data) {
         const hashedPassword = await bcrypt.hash(data.password, 10)
         data.password = hashedPassword
         return super.create(data)
     }
 
-    async verifyPassword(plainPassword, hashedPassword) {
-        return await bcrypt.compare(plainPassword, hashedPassword)
-    }
+
 }
 
 module.exports = UserRepository
@@ -9113,14 +9139,16 @@ ipcMain.handle('user:create', async (event, data) => {
     }
 })
 
+
+
 ipcMain.handle('user:login', async (event, { email, password }) => {
     try {
         const user = await userRepo.findByEmail(email)
-        if (!user) return { success: false, message: 'Utilisateur introuvable' }
-        
+        if (!user) return { success: false, type: "email", message: 'Utilisateur introuvable' }
+
         const isValid = await userRepo.verifyPassword(password, user.password)
-        if (!isValid) return { success: false, message: 'Mot de passe incorrect' }
-        
+        if (!isValid) return { success: false, type: "password", message: 'Mot de passe incorrect' }
+
         return { success: true, user }
     } catch (err) {
         return { success: false, message: err.message }
@@ -27648,6 +27676,11 @@ module.exports = /*#__PURE__*/JSON.parse('{"name":"mysql2","version":"3.22.2","d
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat */
+/******/ 	
+/******/ 	if (typeof __webpack_require__ !== 'undefined') __webpack_require__.ab = __dirname + "/native_modules/";
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};

@@ -6,6 +6,28 @@ class BaseRepository {
         this.table = table
     }
 
+
+    // on recupere les champs possible
+    async getColumns() {
+        const [rows] = await db.query(
+            `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
+             WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?`,
+            [process.env.DB_NAME, this.table]
+        )
+        return rows.map(row => row.COLUMN_NAME)
+    }
+    
+    // on retire les champs qui ne sont pas disponible en bdd
+    async clean(data) {
+        const columns = await this.getColumns()
+        return Object.fromEntries(
+            Object.entries(data).filter(([key]) => columns.includes(key))
+        )
+    }
+
+
+
+    // les requette generique et repetitif
     async findAll() {
         const [rows] = await db.query(`SELECT * FROM ${this.table}`)
         return rows
@@ -20,17 +42,19 @@ class BaseRepository {
     }
 
     async create(data) {
+        const cleanData = await this.clean(data)
         const [result] = await db.query(
             `INSERT INTO ${this.table} SET ?`,
-            [data]
+            [cleanData]
         )
         return result.insertId
     }
 
     async update(id, data) {
+        const cleanData = await this.clean(data)
         const [result] = await db.query(
             `UPDATE ${this.table} SET ? WHERE id = ?`,
-            [data, id]
+            [cleanData, id]
         )
         return result.affectedRows
     }
