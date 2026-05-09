@@ -10,5 +10,5 @@ export const publicRoutes = [
 ]
 
 export const privateRoutes = [
-    { path: '/Dashboard', component: Dashboard, roles: ['planner', 'admin'] },
+    { path: '/', component: Dashboard, roles: ['planner', 'admin'] },
 ]

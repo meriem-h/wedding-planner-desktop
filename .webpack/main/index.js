@@ -9004,6 +9004,27 @@ class BaseRepository {
         return rows[0] || null
     }
 
+    async findBy(conditions) {
+        const keys = Object.keys(conditions)
+        const where = keys.map(key => `${key} = ?`).join(' AND ')
+        const values = Object.values(conditions)
+        
+        const [rows] = await db.query(
+            `SELECT * FROM ${this.table} WHERE ${where}`,
+            values
+        )
+        return rows
+    }
+
+    // async findBy(field, value) {
+
+    //     const [rows] = await db.query(
+    //         `SELECT * FROM ${this.table} WHERE ${[field]} = ?`,
+    //         [value]
+    //     )
+    //     return rows[0] || null
+    // }
+
     async create(data) {
         const cleanData = await this.clean(data)
         const [result] = await db.query(
@@ -9075,6 +9096,25 @@ module.exports = UserRepository
 
 /***/ },
 
+/***/ "./src/back/database/WeddingRepository.js"
+/*!************************************************!*\
+  !*** ./src/back/database/WeddingRepository.js ***!
+  \************************************************/
+(module, __unused_webpack_exports, __webpack_require__) {
+
+const BaseRepository = __webpack_require__(/*! ./BaseRepository */ "./src/back/database/BaseRepository.js")
+const db = __webpack_require__(/*! ./db */ "./src/back/database/db.js")
+
+class WeddingRepository extends BaseRepository {
+    constructor() {
+        super('wedding')
+    }
+}
+
+module.exports = WeddingRepository
+
+/***/ },
+
 /***/ "./src/back/database/db.js"
 /*!*********************************!*\
   !*** ./src/back/database/db.js ***!
@@ -9113,6 +9153,7 @@ db.getConnection()
 (__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 __webpack_require__(/*! ./user.ipc */ "./src/back/ipc/user.ipc.js")
+__webpack_require__(/*! ./wedding.ipc */ "./src/back/ipc/wedding.ipc.js")
 // require('./wedding.ipc')
 // require('./guest.ipc')
 // ...
@@ -9149,11 +9190,76 @@ ipcMain.handle('user:login', async (event, { email, password }) => {
         const isValid = await userRepo.verifyPassword(password, user.password)
         if (!isValid) return { success: false, type: "password", message: 'Mot de passe incorrect' }
 
-        return { success: true, user }
+        const { password: _, ...safeUser } = user
+        return { success: true, user: safeUser }
+
     } catch (err) {
         return { success: false, message: err.message }
     }
 })
+
+/***/ },
+
+/***/ "./src/back/ipc/wedding.ipc.js"
+/*!*************************************!*\
+  !*** ./src/back/ipc/wedding.ipc.js ***!
+  \*************************************/
+(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+const { ipcMain } = __webpack_require__(/*! electron */ "electron")
+const WeddingRepository = __webpack_require__(/*! ../database/WeddingRepository */ "./src/back/database/WeddingRepository.js")
+
+const weddingRepo = new WeddingRepository()
+
+ipcMain.handle('wedding:create', async (event, data) => {
+    try {
+        const id = await weddingRepo.create(data)
+        return { success: true, id }
+    } catch (err) {
+        return { success: false, message: err.message }
+    }
+})
+
+ipcMain.handle('wedding:findAll', async (event) => {
+    try {
+        const data = await weddingRepo.findAll()
+        return { success: true, data }
+    } catch (err) {
+        return { success: false, message: err.message }
+    }
+})
+
+
+
+ipcMain.handle('wedding:findById', async (event, id) => {
+    try {
+        const data = await weddingRepo.findById(id)
+        return { success: true, data }
+    } catch (err) {
+        return { success: false, message: err.message }
+    }
+})
+
+ipcMain.handle('wedding:findBy', async (event, conditions) => {
+    try {
+        const data = await weddingRepo.findBy(conditions)
+        return { success: true, data }
+    } catch (err) {
+        return { success: false, message: err.message }
+    }
+})
+
+
+// ipcMain.handle('wedding:findBy', async (event, field, value) => {
+//     try {
+//         const data = await weddingRepo.findBy(field, value)
+//         return { success: true, data }
+//     } catch (err) {
+//         return { success: false, message: err.message }
+//     }
+// })
+
+
 
 /***/ },
 

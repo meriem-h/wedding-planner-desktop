@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { KeyRound, KeySquare, User, Mail, Phone } from 'lucide-react'
 
-import FormFieldIcon from '../component/FormFieldIcon'
+import FormField from '../component/FormField'
 import { useApi } from '../context/ApiContext'
 
 
@@ -68,9 +68,9 @@ export default function Register() {
 
     }
 
-    useEffect(() => {
-        console.log(form);
-    }, [form]);
+    // useEffect(() => {
+    //     console.log(form);
+    // }, [form]);
 
 
 
@@ -82,7 +82,7 @@ export default function Register() {
             <form className="max-w-sm mx-auto flex flex-col gap-4">
 
 
-                <FormFieldIcon fields={fields} onChange={handleChange} errors={error} />
+                <FormField fields={fields} onChange={handleChange} errors={error} />
 
                 {error?.all && (
                     <div className="bg-red-100 border border-red-500 text-red-700 px-4 py-3 rounded">

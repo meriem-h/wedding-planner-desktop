@@ -41,6 +41,27 @@ class BaseRepository {
         return rows[0] || null
     }
 
+    async findBy(conditions) {
+        const keys = Object.keys(conditions)
+        const where = keys.map(key => `${key} = ?`).join(' AND ')
+        const values = Object.values(conditions)
+        
+        const [rows] = await db.query(
+            `SELECT * FROM ${this.table} WHERE ${where}`,
+            values
+        )
+        return rows
+    }
+
+    // async findBy(field, value) {
+
+    //     const [rows] = await db.query(
+    //         `SELECT * FROM ${this.table} WHERE ${[field]} = ?`,
+    //         [value]
+    //     )
+    //     return rows[0] || null
+    // }
+
     async create(data) {
         const cleanData = await this.clean(data)
         const [result] = await db.query(

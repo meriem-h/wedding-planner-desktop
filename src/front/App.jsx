@@ -1,5 +1,3 @@
-
-
 import React from 'react'
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
@@ -15,33 +13,22 @@ export default function App() {
 
     if (!user) {
         return (
-
             <HashRouter>
-
-                <Header />
-
+                {/* <Header /> */}
                 <Routes>
                     {publicRoutes.map(({ path, component: Component }) => (
                         <Route key={path} path={path} element={<Component />} />
                     ))}
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
-
-
             </HashRouter>
-
-
         )
     }
 
     return (
-
         <HashRouter>
-
-            <Header />
-
+            {/* <Header /> */}
             <Routes>
-
                 {privateRoutes.map(({ path, component: Component, roles }) => (
                     <Route key={path} path={path} element={
                         <ProtectedRoute roles={roles}>
@@ -50,11 +37,7 @@ export default function App() {
                     } />
                 ))}
                 <Route path="*" element={<Navigate to="/" />} />
-
             </Routes>
-
         </HashRouter>
-
-
     )
 }

@@ -22,7 +22,9 @@ ipcMain.handle('user:login', async (event, { email, password }) => {
         const isValid = await userRepo.verifyPassword(password, user.password)
         if (!isValid) return { success: false, type: "password", message: 'Mot de passe incorrect' }
 
-        return { success: true, user }
+        const { password: _, ...safeUser } = user
+        return { success: true, user: safeUser }
+
     } catch (err) {
         return { success: false, message: err.message }
     }
